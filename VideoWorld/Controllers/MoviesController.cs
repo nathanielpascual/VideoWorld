@@ -12,7 +12,8 @@ namespace VideoWorld.Controllers
 		// GET: Movies
 		public ActionResult Index()
 		{
-			return View();
+			var movies = GetMovies();
+			return View(movies);
 		}
 
 		public ActionResult Random()
@@ -23,6 +24,10 @@ namespace VideoWorld.Controllers
 			{
 				new Customer{ Id=1,Name= "Customer1"},
 				new Customer{ Id=1,Name= "Customer2"},
+				new Customer{ Id=1,Name= "Customer3"},
+				new Customer{ Id=1,Name= "Customer4"},
+				new Customer{ Id=1,Name= "Customer5"},
+				new Customer{ Id=1,Name= "Customer6"},
 			};
 
 			var viewModel = new RandomMovieViewModel
@@ -35,10 +40,33 @@ namespace VideoWorld.Controllers
 			return View(viewModel);
 		}
 
-		[Route("movies/released/{year}/{month:regex(\\d{4}:range(1,12)}")]
+		[Route("movies/released/{year}/{month}")]
 		public ActionResult ByReleaseDate(int year, int month) {
 
 			return Content(year + "/" + month);
 		}
+
+		
+
+		
+		public ActionResult Details(int Id)
+		{
+			var movie = GetMovies().FirstOrDefault(x => x.Id == Id);
+			return View(movie);
+		}
+
+		private IEnumerable<Movie> GetMovies()
+		{
+			return new List<Movie>
+			{
+				new Movie() { Id = 1, Name = "Equalizer" },
+				new Movie() { Id = 2, Name = "Equalizer 2" },
+				new Movie() { Id = 3, Name = "John Wick" },
+				new Movie() { Id = 4, Name = "John Wick 2" }
+			};
+		}
+
+		
+	
 	}
 }
