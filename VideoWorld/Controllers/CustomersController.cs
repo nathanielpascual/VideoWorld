@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,29 +11,35 @@ namespace VideoWorld.Controllers
 	{
 		// GET: Customers
 
+		private ApplicationDbContext _context;
+
+		public CustomersController()
+		{
+			_context = new ApplicationDbContext();
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			base.Dispose(disposing);
+			_context.Dispose();
+		}
+
 		public ActionResult Index()
 		{
-			IEnumerable<Customer> customers = GetCustomers();
+			IEnumerable<Customer> customers = _context.Customers.Include(x=>x.MembershipType);
 
 			return View(customers);
 		}
 		[HttpGet]
 		public ActionResult Details(int Id)
 		{
-			var customer = GetCustomers().FirstOrDefault(x => x.Id == Id);
+			var customer = _context.Customers.FirstOrDefault(x=>x.Id==Id);
+
+			if (customer == null)
+				return HttpNotFound();
 
 			return View(customer);
 		}
 
-		private IEnumerable<Customer> GetCustomers()
-		{
-			return new List<Customer>
-			{
-				new Customer() { Id = 1, Name="Nathaniel Pascual"},
-				new Customer() { Id = 2, Name="Aileen Pascual"},
-				new Customer() { Id = 3, Name="Victoria Pascual"},
-				new Customer() { Id = 4, Name="Veronica Pascual"},
-			};
-		}
 	}
 }
