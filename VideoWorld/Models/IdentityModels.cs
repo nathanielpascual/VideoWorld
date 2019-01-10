@@ -20,7 +20,9 @@ namespace VideoWorld.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
+		public DbSet<Customer> Customers { get; set; }
+		public DbSet<Movie> Movies { get; set; }
+		public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
