@@ -16,5 +16,7 @@ namespace VideoWorld.Models
 		public bool IsSubscribedToNewsLetter { get; set; }
 		public MembershipType MembershipType { get; set; }
 		public int MembershipTypeId { get; set; }
+		public DateTime? BirthDate { get; set; }
+
 	}
 }

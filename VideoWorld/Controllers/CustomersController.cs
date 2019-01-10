@@ -33,7 +33,7 @@ namespace VideoWorld.Controllers
 		[HttpGet]
 		public ActionResult Details(int Id)
 		{
-			var customer = _context.Customers.FirstOrDefault(x=>x.Id==Id);
+			var customer = _context.Customers.Include(x => x.MembershipType).FirstOrDefault(x=>x.Id==Id);
 
 			if (customer == null)
 				return HttpNotFound();
