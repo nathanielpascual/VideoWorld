@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,10 +10,24 @@ namespace VideoWorld.Controllers
 {
 	public class MoviesController : Controller
 	{
+		private ApplicationDbContext _context;
 		// GET: Movies
+
+		public MoviesController()
+		{
+			_context = new ApplicationDbContext();
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			base.Dispose(disposing);
+			_context.Dispose();
+		}
+
 		public ActionResult Index()
 		{
-			var movies = GetMovies();
+			IEnumerable<Movie> movies = _context.Movies.Include(x => x.Genre);
+
 			return View(movies);
 		}
 
@@ -48,23 +63,13 @@ namespace VideoWorld.Controllers
 
 		
 
-		
 		public ActionResult Details(int Id)
 		{
-			var movie = GetMovies().FirstOrDefault(x => x.Id == Id);
+			Movie movie = _context.Movies.Include(x=>x.Genre).FirstOrDefault(x => x.Id == Id);
 			return View(movie);
 		}
 
-		private IEnumerable<Movie> GetMovies()
-		{
-			return new List<Movie>
-			{
-				new Movie() { Id = 1, Name = "Equalizer" },
-				new Movie() { Id = 2, Name = "Equalizer 2" },
-				new Movie() { Id = 3, Name = "John Wick" },
-				new Movie() { Id = 4, Name = "John Wick 2" }
-			};
-		}
+		
 
 		
 	
