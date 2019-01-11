@@ -31,35 +31,42 @@ namespace VideoWorld.Controllers
 			return View(movies);
 		}
 
-		public ActionResult Random()
+		public ActionResult New()
 		{
-			Movie movie = new Movie() { Id = 1, Name = "Equalizer" };
+			IEnumerable<Genre> genre = _context.Genres.ToList();
 
-			var customers = new List<Customer>
+			var viewModel = new MovieFormViewModel()
 			{
-				new Customer{ Id=1,Name= "Customer1"},
-				new Customer{ Id=1,Name= "Customer2"},
-				new Customer{ Id=1,Name= "Customer3"},
-				new Customer{ Id=1,Name= "Customer4"},
-				new Customer{ Id=1,Name= "Customer5"},
-				new Customer{ Id=1,Name= "Customer6"},
+				Movie = new Movie(),
+				Genres = genre
+				
 			};
 
-			var viewModel = new RandomMovieViewModel
+			return View("MovieForm", viewModel);
+		}
+
+		public ActionResult Save(MovieFormViewModel model)
+		{
+			Movie movie = model.Movie;
+			if (movie.Id == 0)
 			{
-				Movie = movie,
-				Customers = customers
-			};
+				movie.DateAdded = DateTime.Now;
+				_context.Movies.Add(movie);
+			}
+			else
+			{
+				var existingMovie = _context.Movies.FirstOrDefault(m => m.Id == movie.Id);
+				existingMovie.Name = movie.Name;
+				existingMovie.ReleasedDate = movie.ReleasedDate;
+				existingMovie.GenreId = movie.GenreId;
+				existingMovie.NumberInStock = movie.NumberInStock;
+			}
 
+			return RedirectToAction("Index", "Movies");
 
-			return View(viewModel);
 		}
 
-		[Route("movies/released/{year}/{month}")]
-		public ActionResult ByReleaseDate(int year, int month) {
-
-			return Content(year + "/" + month);
-		}
+		
 
 		
 

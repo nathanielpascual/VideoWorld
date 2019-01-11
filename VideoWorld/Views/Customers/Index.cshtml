@@ -7,8 +7,10 @@
 }
 
 <h2>Customers</h2>
+<hr />
+@Html.ActionLink("New Customer","New", "Customers", new { @class = "btn btn-primary" })
 
-@if (Model==null)
+@if (Model == null)
 {
     <p>We have no customers yet.</p>
 }

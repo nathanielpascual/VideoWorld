@@ -33,26 +33,7 @@ namespace VideoWorld.Controllers
 			return View(customers);
 		}
 
-		[HttpPost]
-		public ActionResult Save(CustomerFormViewModel model)
-		{
-			Customer customer = model.Customer;
-
-			if (customer.Id == 0)
-				_context.Customers.Add(customer);
-			else
-			{
-				var existingCustomer = _context.Customers.FirstOrDefault(x => x.Id == customer.Id);
-				existingCustomer.Name = customer.Name;
-				existingCustomer.MembershipTypeId = customer.MembershipTypeId;
-				existingCustomer.BirthDate = customer.BirthDate;
-				existingCustomer.IsSubscribedToNewsLetter = customer.IsSubscribedToNewsLetter;
-
-			}
-			_context.SaveChanges();
-
-			return RedirectToAction("Index", "Customers");
-		}
+		
 
 		public ActionResult New()
 		{
@@ -61,6 +42,7 @@ namespace VideoWorld.Controllers
 
 			var viewModel = new CustomerFormViewModel()
 			{
+				Customer = new Customer(),
 				MembershipTypes = memberShipType,
 			};
 
@@ -81,6 +63,27 @@ namespace VideoWorld.Controllers
 			};
 
 			return View("CustomerForm",viewModel);
+		}
+
+		[HttpPost]
+		public ActionResult Save(CustomerFormViewModel model)
+		{
+			Customer customer = model.Customer;
+
+			if (customer.Id == 0)
+				_context.Customers.Add(customer);
+			else
+			{
+				var existingCustomer = _context.Customers.FirstOrDefault(x => x.Id == customer.Id);
+				existingCustomer.Name = customer.Name;
+				existingCustomer.MembershipTypeId = customer.MembershipTypeId;
+				existingCustomer.BirthDate = customer.BirthDate;
+				existingCustomer.IsSubscribedToNewsLetter = customer.IsSubscribedToNewsLetter;
+
+			}
+			_context.SaveChanges();
+
+			return RedirectToAction("Index", "Customers");
 		}
 
 		[HttpGet]
