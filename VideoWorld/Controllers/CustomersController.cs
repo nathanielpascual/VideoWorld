@@ -28,7 +28,7 @@ namespace VideoWorld.Controllers
 
 		public ActionResult Index()
 		{
-			IEnumerable<Customer> customers = _context.Customers.Include(x=>x.MembershipType);
+			var customers = _context.Customers.Include(x=>x.MembershipType);
 
 			return View(customers);
 		}
@@ -38,7 +38,7 @@ namespace VideoWorld.Controllers
 		public ActionResult New()
 		{
 
-			IEnumerable<MembershipType> memberShipType = _context.MembershipTypes.ToList();
+			var memberShipType = _context.MembershipTypes.ToList();
 
 			var viewModel = new CustomerFormViewModel()
 			{
@@ -68,7 +68,7 @@ namespace VideoWorld.Controllers
 		[HttpPost]
 		public ActionResult Save(CustomerFormViewModel model)
 		{
-			Customer customer = model.Customer;
+			var customer = model.Customer;
 
 			if (customer.Id == 0)
 				_context.Customers.Add(customer);

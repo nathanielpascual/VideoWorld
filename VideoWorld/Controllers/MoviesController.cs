@@ -33,7 +33,7 @@ namespace VideoWorld.Controllers
 
 		public ActionResult New()
 		{
-			IEnumerable<Genre> genre = _context.Genres.ToList();
+			var genre = _context.Genres.ToList();
 
 			var viewModel = new MovieFormViewModel()
 			{
@@ -47,7 +47,7 @@ namespace VideoWorld.Controllers
 
 		public ActionResult Save(MovieFormViewModel model)
 		{
-			Movie movie = model.Movie;
+			var movie = model.Movie;
 			if (movie.Id == 0)
 			{
 				movie.DateAdded = DateTime.Now;
@@ -62,17 +62,35 @@ namespace VideoWorld.Controllers
 				existingMovie.NumberInStock = movie.NumberInStock;
 			}
 
+			_context.SaveChanges();
+
 			return RedirectToAction("Index", "Movies");
 
 		}
 
-		
 
-		
+		public ActionResult Edit(int Id)
+		{
+			var movie = _context.Movies.Include(x => x.Genre).FirstOrDefault(x => x.Id == Id);
+
+			if (movie == null)
+				return HttpNotFound();
+
+			var viewModel = new MovieFormViewModel()
+			{
+				Movie = movie,
+				Genres = _context.Genres.ToList()
+
+			};
+
+			return View("MovieForm",viewModel);
+		}
+
+
 
 		public ActionResult Details(int Id)
 		{
-			Movie movie = _context.Movies.Include(x=>x.Genre).FirstOrDefault(x => x.Id == Id);
+			var movie = _context.Movies.Include(x=>x.Genre).FirstOrDefault(x => x.Id == Id);
 			return View(movie);
 		}
 
