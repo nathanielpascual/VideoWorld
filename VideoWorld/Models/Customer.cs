@@ -19,6 +19,7 @@ namespace VideoWorld.Models
 		public MembershipType MembershipType { get; set; }
 
 		[Display(Name="Membership Type")]
+		[Required]
 		public int MembershipTypeId { get; set; }
 
 		[Display(Name ="Date of Birth")]
